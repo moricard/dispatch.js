@@ -1,0 +1,19 @@
+{
+  "name": "dispatch",
+  "version": "0.0.0",
+  "description": "global event dispatcher for backbone.js",
+  "main": "dispatch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricardmo/dispatch.js.git"
+  },
+  "dependencies": {
+      "underscore" : ""
+      ,"backbone" : ""
+  },
+  "author": "Marc-Olivier Ricard",
+  "license": "MIT"
+}
