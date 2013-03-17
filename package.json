@@ -12,7 +12,8 @@
   },
   "dependencies": {
       "underscore" : ""
-      ,"backbone" : ""
+      ,"backbone" : ">=0.9.10"
+      ,"amdefine": ">=0.0.2"
   },
   "author": "Marc-Olivier Ricard",
   "license": "MIT"
