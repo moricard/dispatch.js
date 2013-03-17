@@ -10,14 +10,12 @@ define (
 
         var dispatch = _.extend({}, Backbone.Events);
 
-
         // Linking the Models
         // ------------------
         
         // We make a safe copy of the trigger function, allowing us to override
         // it and automatically forward events to the global dispatcher.
         Backbone.Model.prototype._trigger = Backbone.Model.prototype.trigger;
-
 
         _.extend(Backbone.Model.prototype, {
 
@@ -27,8 +25,8 @@ define (
             // Overrinding the trigger function to forward every event to the
             // bound dispatcher.
             , trigger : function() {
-                this._trigger.apply(this,  arguments );
-                this.dispatcher.trigger.apply(this, arguments );
+                this._trigger.apply( this,  arguments );
+                this.dispatcher.trigger.apply( this, arguments );
             }
         });
 

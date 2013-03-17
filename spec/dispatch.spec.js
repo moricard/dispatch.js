@@ -49,7 +49,24 @@ describe("Models", function() {
     });
 
     it("should forward 'destroy' events when deleted", function() {
+        spyOn( dispatch, 'trigger' );
 
+        model.destroy();
+        expect( dispatch.trigger ).toHaveBeenCalled();
+        expect( dispatch.trigger.mostRecentCall.args[0] ).toBe('destroy');
+        expect( dispatch.trigger.mostRecentCall.args[1] ).toBe( model );
+    });
+
+    it("should forward 'add' events when added to a collection", function() {
+        spyOn( dispatch, 'trigger' );
+
+        var collection = new Backbone.Collection();
+
+        collection.add( model );
+
+        expect( dispatch.trigger ).toHaveBeenCalled();
+        expect( dispatch.trigger.mostRecentCall.args[0] ).toBe('add');
+        expect( dispatch.trigger.mostRecentCall.args[1] ).toBe( model );
     });
 
     
