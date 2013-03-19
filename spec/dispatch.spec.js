@@ -16,8 +16,10 @@ describe("Dispatcher", function() {
     });
 
     it("should know about it's subscribers", function() {
-        var subscriber = { cid : 1 };
-        
+        var publisher = new Backbone.Model();
+        expect( dispatch.publishers.length ).toBe(1);
+        publisher.destroy();
+        expect( dispatch.publishers.length ).toBe(0);
     });
 });
 
@@ -29,16 +31,12 @@ describe("Models", function() {
         model = new Backbone.Model();
     });
 
-
     it("should copy manually triggered events to the Dispatcher", function() {
         spyOn( dispatch, 'trigger' );
         spyOn( model, '_trigger' );
-
         model.trigger('test');
-
         expect( dispatch.trigger ).toHaveBeenCalledWith('test');
         expect( model._trigger ).toHaveBeenCalledWith('test');
-
     });
 
     it("should forward 'change' events when being updated", function() {
@@ -69,5 +67,17 @@ describe("Models", function() {
         expect( dispatch.trigger.mostRecentCall.args[1] ).toBe( model );
     });
 
-    
+    it("should share it's dispatcher with every other model", function() {
+        var model2 = new Backbone.Model();
+        expect( model.dispatcher ).toBe( model2.dispatcher );
+        model2.destroy();
+    });
+
+    it("can add itself to the Dispatcher upon construction", function() {
+        expect( dispatch.publishers.length ).toBe( 1 );
+    });
+
+    afterEach( function() {
+        model.destroy();
+    });    
 });
