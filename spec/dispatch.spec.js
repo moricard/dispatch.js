@@ -73,6 +73,34 @@ describe("Models", function() {
         model2.destroy();
     });
 
+    it("can remove itself from the Dispatcher's channel", function() {
+        // Initial state after construction
+        expect( dispatch.publishers.length ).toBe( 1 );
+        expect( model.dispatcher ).toBe( dispatch );
+
+        // Unlinking the model from the dispatcher.
+        model.unlink();
+        expect( model.dispatcher ).toBe( null );
+        expect( dispatch.publishers.length ).toBe( 0 );
+
+        // All links are broken between the model and the dispatcher's channel.
+        spyOn( dispatch, 'trigger');
+        model.trigger('test');
+        expect( dispatch.trigger ).not.toHaveBeenCalled();
+    });
+
+    it("does not break other objects when unlinking from Dispatch", function() {
+        var model2 = new Backbone.Model();
+        expect( model2.dispatcher ).toBe( dispatch );
+        model.unlink();
+        expect( model.dispatch).not.toBeDefined();
+
+        // Condition still true after unlinking model1
+        expect( dispatch ).toBeDefined();
+        expect( model2.dispatcher ).toBe( dispatch );
+        model2.destroy();        
+    });
+
     it("can add itself to the Dispatcher upon construction", function() {
         expect( dispatch.publishers.length ).toBe( 1 );
     });

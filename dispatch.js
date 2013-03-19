@@ -40,36 +40,41 @@ define (
 
             // Overrinding the trigger function to forward every event to the
             // bound dispatcher.
-            , trigger : function( message /*, args */) {
+            , trigger : function() {
                 this._trigger.apply( this,  arguments );
-                this.dispatcher.trigger.apply( this, arguments );
-            }
-            
+                if ( this.dispatcher )
+                    this.dispatcher.trigger.apply( this, arguments );
+            }            
             // Upon destruction, we remove the reference to this object
             // from the dispatcher.
             , destroy : function() {
-                this.dispatcher.unlink( this );
+                if ( this.dispatcher )
+                    this.dispatcher.unlink( this );
                 destroy.apply( this, arguments );
+            }
+            // Unlinking the model from the dispatcher's channel, all messages
+            // become local.
+            , unlink : function() {
+                this.dispatcher.unlink( this );
+                this.dispatcher = null;
             }
         });
 
         _.extend( Dispatch, {
 
+            // Array containing all objects that can publish to the dispatcher's
+            // channel.
             publishers : []
 
-            , events : {
-                'destroy' : function() {
-                    console.debug("destroy event triggered");
-                    Dispatch.publishers = _.without( this.publisher, this );
-                }
-            }
-
+            // Add an object to the dispatcher's channel
             , link : function( object ) {
                 this.publishers = _.union( this.publishers,  [object] );                
             }
             
+            // Remove an object from the list of publishers
             , unlink : function( object ) {
                 this.publishers = _.without( this.publishers, object );
+                //object.dispatcher = null;
             }
 
         });
